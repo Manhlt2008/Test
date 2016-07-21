@@ -1,0 +1,27 @@
+﻿
+<form action="/Account/Login" method="post">
+    <table>
+        <tr>
+            <td>
+                UserName
+            </td>
+            <td>
+                <input type="text" ng-model="UserName"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Password
+            </td>
+            <td>
+                <input type="password" ng-model="PassWord"/>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button ng-click="CheckLogIn()">Log In</button>
+            </td>
+        </tr>
+    </table>
+</form>

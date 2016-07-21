@@ -1,0 +1,267 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@*pagging*@
+<script src="~/AngularApp/ui-bootstrap-tpls-0.11.0.js"></script>
+@*pagging*@
+
+<div class="page-co-che-qc col-xs-12" ng-app="ngUsers">
+    <div class="page-header">
+        <h4>Quản lý thành viên</h4>
+    </div>
+    <div ng-controller="ListUser">
+        <div class="filter-bar">
+            <form action="" method="POST" class="form-inline" role="form">
+                <div class="form-group m-r-5">
+                    <label for="">Tên truy cập:</label>
+                    <input type="text" class="form-control input-sm">
+                </div>
+                @*<div class="form-group m-r-5">
+                        <label for="">Phòng ban:</label>
+                        <select class="form-control input-sm">
+                            <option>Khối kinh doanh</option>
+                        </select>
+                    </div>*@
+                <div class="form-group m-r-5">
+                    <label for="">Nhóm:</label>
+                    <select class="form-control input-sm">
+                        <option ng-repeat="gr in lstUserGroup" value="{{gr.GroupId}}">{{gr.GroupName}}</option>
+                    </select>
+                </div>
+                <div class="form-group m-r-5">
+                    <label for="">Trạng thái:</label>
+                    <select class="form-control input-sm">
+                        <option ng-repeat="st in lstStaus" value="{{st.Id}}">{{st.Value}}</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
+            </form>
+        </div>
+        <hr>
+        <a href="#modal-create-member" class="none btn btn-sm btn-primary pull-right m-b-10" data-toggle="modal"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Thêm thành viên</a>
+
+
+
+        <div class="table-responsive" ng-controller="PaginationDemoCtrl">
+            <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">UserId</th>
+                        <th>Tên truy cập</th>
+                        <th>Họ và tên</th>
+                        <th>Email</th>
+                        <th class="text-center">Nhóm quyền</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Tác vụ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in data.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
+                        @*<td class="text-center">{{$index + 1}}</td>*@
+                        <td class="text-center">{{user.UserId}}</td>
+                        <td>{{user.Username}}</td>
+                        <td>{{user.Fullname}}</td>
+                        <td>{{user.Email}}</td>
+                        <td class="text-center"><a href="#">{{user.DepartmentId}}</a></td>
+                        <td class="text-center">
+                            <span class="{{user.Status==0?'text-green':'text-d-red'}}">
+                                {{user.Status==0?"Bình thường": "Khóa/Tạm dừng"}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="#"><i class="fa fa-lg fa-edit"></i></a>
+                            <a href="#modal-alert-del" @*ng-click="Delete(user.UserId)"*@>
+                                <i class="fa fa-lg fa-trash-o"></i>
+                            </a>
+                            <a href="#modal-reset-password" data-toggle="modal">
+                                <i class="fa fa-lg fa-key"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-create-member" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Thêm thành viên</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Tên truy cập</label>
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Email</label>
+                            <div class="col-xs-8">
+                                <input type="email" class="form-control input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Họ và tên</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control input-sm" placeholder="Họ và tên đệm">
+                            </div>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control input-sm" placeholder="Tên">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Khu vực</label>
+                            <div class="col-xs-8">
+                                <select class="form-control input-sm">
+                                    <option>Chọn khu vực</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
+                            <div class="col-xs-8">
+                                <ul class="tree-view-checkbox m-b-10">
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                </ul>
+                                <div class="text-center m-b-10"><i class="fa fa-caret-square-o-up fa-lg"></i>&nbsp;<i class="fa fa-caret-square-o-down fa-lg"></i></div>
+                                <ul class="tree-view-checkbox">
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                    <li><label>Publisher Admin</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Phòng ban</label>
+                            <div class="col-xs-6">
+                                <select class="form-control input-sm" multiple>
+                                    <option selected>Phòng A</option>
+                                    <option>Phòng B</option>
+                                    <option>Phòng C</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2">
+                                <a href="#modal-select-pb" data-toggle="modal" class="btn btn-sm btn-default">Chọn</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-8 col-xs-offset-4">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-lg fa-plus-circle"></i>&nbsp;Thêm</button>
+                                <button type="button" data-dismiss="modal" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-times-circle"></i>&nbsp;Bỏ qua</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="modal-alert-del" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Thông báo</h4>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Thông tin bị xóa sẽ không lấy lại được. Hãy kiểm tra kỹ trước khi xóa.</strong></p>
+                    <p>Bạn có chắc chắn muốn xóa không?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-primary">Đồng ý</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Bỏ qua</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-reset-password" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Reset Password</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Tên truy cập</label>
+                            <div class="col-xs-8"><p class="form-control-static">Kieuvtm</p></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Email</label>
+                            <div class="col-xs-8"><p class="form-control-static">kieuvtm@fpt.com.vn</p></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Họ và tên</label>
+                            <div class="col-xs-8"><p class="form-control-static">Vỏ Thị Minh Kiều</p></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Mật khẩu</label>
+                            <div class="col-xs-8"><input type="text" class="form-control input-sm"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">Xác nhận mật khẩu</label>
+                            <div class="col-xs-8"><input type="text" class="form-control input-sm"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-8 col-xs-offset-4">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check-circle"></i>&nbsp;Xác nhận</button>
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times-circle"></i>&nbsp;Bỏ qua</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="modal-select-pb" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Chọn phòng ban</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="tree-view-checkbox m-b-10" style="max-height:auto">
+                        <li>
+                            <label><input type="checkbox">&nbsp;Khối kinh doanh</label>
+                            <ul class="sub">
+                                <li><label><input type="checkbox">&nbsp;Trung tâm công nghệ</label></li>
+                                <li><label><input type="checkbox">&nbsp;Trung tâm công nghệ</label></li>
+                                <li><label><input type="checkbox">&nbsp;Trung tâm công nghệ</label></li>
+                                <li><label><input type="checkbox">&nbsp;Trung tâm công nghệ</label></li>
+                                <li><label><input type="checkbox">&nbsp;Trung tâm công nghệ</label></li>
+                            </ul>
+                        </li>
+                        <li><label><input type="checkbox">&nbsp;Khối kinh doanh</label></li>
+                        <li><label><input type="checkbox">&nbsp;Khối kinh doanh</label></li>
+                    </ul>
+                    <div class="text-right">
+                        <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-check-circle"></i>&nbsp;Đồng ý</a>
+                        <a href="#" class="btn btn-sm btn-link">Bỏ qua</a>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+
