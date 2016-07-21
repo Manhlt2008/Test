@@ -17,12 +17,13 @@ namespace Angular.DAL
                     .QueryMany<User>();
             }
         }
-        public void DeleteUser(int userId)
+        public void BlockUser(int userId,int status)
         {
             using (var context = Angular.DAL.DBContext.MainDBContext.MainDB())
             {
-                context.StoredProcedure("User_Delete")
+                context.StoredProcedure("User_UpdateStatus")
                     .Parameter("UserId", userId)
+                    .Parameter("Status", status)
                     .Execute();
             }
         }

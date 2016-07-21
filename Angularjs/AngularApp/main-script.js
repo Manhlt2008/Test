@@ -1,8 +1,8 @@
-function showTooltips(){
-	$('.tooltips').tooltip();
-}
+//function showTooltips(){
+//	$('.tooltips').tooltip();
+//}
 function showPopoversHTML(){
-	$('.popovers-html').popover({title: 'title', html: true});
+	//$('.popovers-html').popover({title: 'title', html: true});
 	$('.popovers-html').on('shown.bs.popover', function () {
 	  	$('.close-popover').on('click', function(event) {
 			$('.popovers-html').popover('hide');
@@ -59,7 +59,7 @@ function collapseTable(){
 $(document).ready(function() {
 	// Tab-radio
 	tabRadio();
-	showTooltips();
+	//showTooltips();
 	showPopoversHTML();
 	treeviewCheckbox();
 	treeviewtable();

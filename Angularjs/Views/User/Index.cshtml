@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Index";
+    <title>Polyad</title>
 }
 @*pagging*@
 <script src="~/AngularApp/ui-bootstrap-tpls-0.11.0.js"></script>
@@ -16,12 +17,6 @@
                     <label for="">Tên truy cập:</label>
                     <input type="text" class="form-control input-sm">
                 </div>
-                @*<div class="form-group m-r-5">
-                        <label for="">Phòng ban:</label>
-                        <select class="form-control input-sm">
-                            <option>Khối kinh doanh</option>
-                        </select>
-                    </div>*@
                 <div class="form-group m-r-5">
                     <label for="">Nhóm:</label>
                     <select class="form-control input-sm">
@@ -71,10 +66,10 @@
                         </td>
                         <td class="text-center">
                             <a href="#"><i class="fa fa-lg fa-edit"></i></a>
-                            <a href="#modal-alert-del" @*ng-click="Delete(user.UserId)"*@>
+                            <a data-target="#modal-alert-del" data-toggle="modal" ng-click="setId(user.UserId)">
                                 <i class="fa fa-lg fa-trash-o"></i>
                             </a>
-                            <a href="#modal-reset-password" data-toggle="modal">
+                            <a href="#modal-reset-password" data-toggle="modal" ng-click="setId(user.UserId)">
                                 <i class="fa fa-lg fa-key"></i>
                             </a>
                         </td>
@@ -83,8 +78,26 @@
             </table>
             <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>
         </div>
+        <div class="modal fade" id="modal-alert-del" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Thông báo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Thông tin bị xóa sẽ không lấy lại được. Hãy kiểm tra kỹ trước khi xóa.</strong></p>
+                        <p>Bạn có chắc chắn muốn xóa không?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" ng-click="Delete()">Đồng ý</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Bỏ qua</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
+   
     <div class="modal fade" id="modal-create-member" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -172,24 +185,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="modal fade" id="modal-alert-del" data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Thông báo</h4>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Thông tin bị xóa sẽ không lấy lại được. Hãy kiểm tra kỹ trước khi xóa.</strong></p>
-                    <p>Bạn có chắc chắn muốn xóa không?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-primary">Đồng ý</button>
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Bỏ qua</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <div class="modal fade" id="modal-reset-password" data-backdrop="static">
         <div class="modal-dialog">

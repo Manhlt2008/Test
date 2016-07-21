@@ -32,9 +32,10 @@ namespace Angular.Controllers
             return Json(lstgr, JsonRequestBehavior.AllowGet);
         }
 
-        public void DeleteUser(int userId)
+        public void BlockUser(int userId)
         {
-            new UserBL().DeleteUser(userId);
+            //status: 0- bình thường, 1- khóa
+            new UserBL().BlockUser(userId,1);
         }
     }
 }

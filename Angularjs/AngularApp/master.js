@@ -7,10 +7,10 @@ ngUsers.factory('dataService', function ($http) {
         }
     };
 }).controller("ListUser", function ($scope, $http, dataService) {
-     $http.get("/User/GetListUsers")
-    .then(function (response) {
-        $scope.lstUser = response.data;
-    });
+    $http.get("/User/GetListUsers")
+   .then(function (response) {
+       $scope.lstUser = response.data;
+   });
     //load nhóm
     $http.get("/User/GetUserGroup")
    .then(function (lstuserg) {
@@ -31,14 +31,20 @@ ngUsers.factory('dataService', function ($http) {
             Value: "Khóa/Tạm dừng"
         }
     ]
-    $scope.Delete = function (userId) {
+    $scope.setId = function (currentId) {
+        $scope.currentId = currentId;
+    }
+    $scope.Delete = function () {
+        var userId = $scope.currentId;
         $http({
             method: 'POST',
-            url: '/User/DeleteUser',
+            url: '/User/BlockUser',
             data: { 'userId': userId },
         })
         .success(function (data) {
             console.log("Xóa thành công userId " + userId);
+            $(".close").trigger("click");
+            window.location.reload();
         })
         .error(function () {
             console.log("Xóa lỗi " + userId);
@@ -70,6 +76,6 @@ ngUsers.factory('dataService', function ($http) {
             }
         };
         dataService.getSessions().success(handleSuccess);
-});
+    });
 
 
