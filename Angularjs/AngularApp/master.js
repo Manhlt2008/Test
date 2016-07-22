@@ -34,6 +34,14 @@ ngUsers.factory('dataService', function ($http) {
     $scope.setId = function (currentId) {
         $scope.currentId = currentId;
     }
+    $scope.submitForm = function (isValid) {
+        if (isValid) {
+            alert('các trường có dấu * bắt buộc');
+            return;
+        }
+
+    };
+    //Delete User
     $scope.Delete = function () {
         var userId = $scope.currentId;
         $http({
@@ -49,10 +57,18 @@ ngUsers.factory('dataService', function ($http) {
         .error(function () {
             console.log("Xóa lỗi " + userId);
         });
-    }
+    };
+    //Create User
+    $scope.Create = function () {
+        var userName = $scope.UserNameCreate;
+        var email = $scope.EmailCreate;
+        var fullName = $scope.FullNameCreate;
+        var groupId = $scope.GroupCreate;
+        alert("ahihi pass rồi !!!");
+    };
+}).controller("ValidateData", function () {
 
-})
-    .controller('PaginationDemoCtrl', function ($scope, dataService) {
+}).controller('Pagination', function ($scope, dataService) {
         //panging
         var handleSuccess = function (data, status) {
             $scope.data = data;

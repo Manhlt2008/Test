@@ -3,13 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         
         <script src="~/Scripts/jquery-3.1.0.js"></script>
         @*angularjs*@
        
         <script src="~/AngularApp/Components/angular.min.js"></script>
+        <script src="~/Scripts/angular-route.min.js"></script> @*add mới dùng được route*@
+        <script src="~/AngularApp/app.js"></script>
         <script src="~/AngularApp/master.js"></script>
         @*style*@
         <link href="~/Content/Styles/bootstrap.min.css" rel="stylesheet" />
@@ -49,12 +50,9 @@
         <footer>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+                    <p>&copy; @DateTime.Now.Year - FO</p>
                 </div>
             </div>
         </footer>
-
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
     </body>
 </html>

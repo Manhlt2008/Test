@@ -4,3 +4,7 @@
 .mb10{
     margin-bottom:10px !important;
 }
+.error{
+    color:#f00;
+    margin-left:36%;
+}
