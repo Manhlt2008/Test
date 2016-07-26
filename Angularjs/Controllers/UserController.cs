@@ -32,10 +32,12 @@ namespace Angularjs.Controllers
             var lstdpmBl = dpmBl.GetAllDepartment();
             return Json(lstdpmBl, JsonRequestBehavior.AllowGet);
         }
-        //public JsonResult UserSearch(string userName,string )
-        //{
-
-        //}
+        public JsonResult UserGetByCondition(string userName, int departmentId, int status)
+        {
+            var userBl = new UserBL();
+            var lstUser = userBl.Users_GetByCondition(userName, departmentId, status);
+            return Json(lstUser, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetUserGroup()
         {
             var userBl = new UserBL();
@@ -81,6 +83,38 @@ namespace Angularjs.Controllers
             }
             else {
                 message = "Người dùng này không tồn tại trong hệ thống";
+            }
+            return Json(new { message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult InsertUser(string userName, string fullName, string password, string email, string groupId,
+                                int departmentId)
+        {
+            var userBl = new UserBL();
+            string message = string.Empty;
+            try
+            {
+                userBl.UserInsert(userName, fullName, Crytography.MD5Hash("123456"), email, groupId, departmentId, 0, 0, DateTime.Now, DateTime.Now);
+                message = "Thêm mới User thành công!!!";
+            }
+            catch (Exception)
+            {
+                message = "Có lỗi xảy ra, xin vui lòng thử lại";
+            }
+            return Json(new { message }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult UpdateUser(int userId,string userName, string fullName, string email, string groupId,
+                                int departmentId, int status)
+        {
+            var userBl = new UserBL();
+            string message = string.Empty;
+            try
+            {
+                userBl.UserUpdate(userId, userName, fullName, email, groupId, departmentId, status, DateTime.Now);
+                message = "Update User thành công!!!";
+            }
+            catch (Exception)
+            {
+                message = "Có lỗi xảy ra, xin vui lòng thử lại";
             }
             return Json(new { message }, JsonRequestBehavior.AllowGet);
         }

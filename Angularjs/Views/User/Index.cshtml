@@ -12,24 +12,31 @@
     </div>
     <div ng-controller="ListUser">
         <div class="filter-bar">
-            <form action="" method="POST" class="form-inline" role="form">
+            <form class="form-inline" role="form" ng-submit="SearchUser(UserSearch)">
                 <div class="form-group m-r-5">
                     <label for="">Tên truy cập:</label>
-                    <input type="text" class="form-control input-sm">
+                    <input type="text" class="form-control input-sm" ng-model="UserSearch.UserName">
                 </div>
                 <div class="form-group m-r-5">
-                    <label for="">Phòng ban:</label>
-                    <select class="form-control input-sm">
+                    <label for="">Phòng ban:</label> 
+                    <select class="form-control input-sm" ng-model="UserSearch.Department" ng-init="UserSearch.Department='-1'">
+                        @*<option value="-1" class="ng-binding ng-scope">Tất cả</option>*@
+
                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                     </select>
+                    @*<select class="form-control input-sm" ng-model="UserSearch.Department"
+                            ng-options="dpm.DepartmentId as dpm.Description for dpm in lstDeparment">
+                        <option style="display:none" value="">Tất cả</option>
+                    </select>*@
+                    
                 </div>
                 <div class="form-group m-r-5">
                     <label for="">Trạng thái:</label>
-                    <select class="form-control input-sm">
+                    <select class="form-control input-sm" ng-model="UserSearch.Status" ng-init="UserSearch.Status='-1'">
                         <option ng-repeat="st in lstStaus" value="{{st.Id}}">{{st.Value}}</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-sm btn-primary" ng-click="SearchUser()"><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
+                <button type="submit" class="btn btn-sm btn-primary" @*ng-click="SearchUser()"*@><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
             </form>
         </div>
         <hr>
@@ -127,11 +134,11 @@
                         <h4 class="modal-title">Thêm thành viên</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" class="form-horizontal" role="form" name="CreateForm" ng-controller="ValidateData" novalidate>
+                        <form class="form-horizontal" role="form" name="CreateForm" ng-submit="Create_Post(User)">
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Tên truy cập</label>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control input-sm" ng-model="UserNameCreate" name="UserNameCreate" required>
+                                    <input type="text" class="form-control input-sm" ng-model="User.UserNameCreate" name="UserNameCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid">
                                     <span ng-show="CreateForm.UserNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
@@ -140,7 +147,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Email</label>
                                 <div class="col-xs-8">
-                                    <input type="email" class="form-control input-sm" ng-model="EmailCreate" name="EmailCreate" required>
+                                    <input type="email" class="form-control input-sm" ng-model="User.EmailCreate" name="EmailCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid">
                                     <span ng-show="CreateForm.EmailCreate.$error.required">Bạn chưa nhập email</span>
@@ -150,7 +157,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Họ và tên</label>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control input-sm" ng-model="FullNameCreate" name="FullNameCreate" required>
+                                    <input type="text" class="form-control input-sm" ng-model="User.FullNameCreate" name="FullNameCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid">
                                     <span ng-show="CreateForm.FullNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
@@ -165,7 +172,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Phòng ban</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" @*ng-model="GroupCreate" required*@>
+                                    <select class="form-control input-sm" ng-model="User.DepartmentCreate" ng-init="User.DepartmentCreate='-1'" required>
                                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                                     </select>
                                 </div>
@@ -173,27 +180,30 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
                                 <div class="col-xs-8">
-                                    <ul class="tree-view-checkbox m-b-10">
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                    </ul>
-                                    <div ng-dropdown-multiselect="" options="lstUserGroup" selected-model="example1model"></div>
+                                    <select class="form-control input-sm" ng-model="User.GroupCreate" required ng-init="User.GroupCreate='31'">
+                                        <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
+                                    </select>
+                                    @*<ul class="tree-view-checkbox m-b-10">
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                    </ul>
+                    <div ng-dropdown-multiselect="" options="lstUserGroup" selected-model="example1model"></div>
 
-                                    <div class="text-center m-b-10"><i class="fa fa-caret-square-o-up fa-lg"></i>&nbsp;<i class="fa fa-caret-square-o-down fa-lg"></i></div>
-                                    <ul class="tree-view-checkbox">
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                    </ul>
+                    <div class="text-center m-b-10"><i class="fa fa-caret-square-o-up fa-lg"></i>&nbsp;<i class="fa fa-caret-square-o-down fa-lg"></i></div>
+                    <ul class="tree-view-checkbox">
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                        <li><label>Publisher Admin</label></li>
+                    </ul>*@
                                 </div>
                             </div>
                             <div class="form-group none">
@@ -211,8 +221,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-8 col-xs-offset-4">
-                                    <button type="submit" class="btn btn-sm btn-primary" ng-click="Create()"
-                                            ng-disabled="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid ||
+                                    <button type="submit" class="btn btn-sm btn-primary"
+                                       ng-disabled="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid ||
                                                          CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid ||
                                                          CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid ">
                                         <i class="fa fa-lg fa-plus-circle"></i>
@@ -254,10 +264,18 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Nhóm</label>
+                                <label for="" class="col-xs-4 control-label">Phòng ban</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="GroupCreate" required>
-                                        <option ng-repeat="gr in lstUserGroup" value="{{gr.GroupId}}">{{gr.GroupName}}</option>
+                                    <select class="form-control input-sm" ng-model="UserDetail.Department" required ng-init="UserDetail.Department='{{UserDetail.DepartmentId}}'">
+                                        <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" ng-model="UserDetail.Group" required>
+                                        <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
                                     </select>
                                 </div>
                             </div>

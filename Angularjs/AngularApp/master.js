@@ -7,6 +7,7 @@ ngUsers.factory('dataService', function ($http) {
         }
     };
 }).controller("ListUser", function ($scope, $http, dataService) {
+    
     $http.get("/User/GetListUsers")
    .then(function (response) {
        $scope.lstUser = response.data;
@@ -15,17 +16,27 @@ ngUsers.factory('dataService', function ($http) {
     $http.get("/User/GetUserGroup")
    .then(function (lstuserg) {
        $scope.lstUserGroup = lstuserg.data;
+       //var optiondefault = {
+       //    GroupId: -1,
+       //    GroupName: 'Tất cả'
+       //}
+       //$scope.lstUserGroup[0] = optiondefault;
    });
     //load phòng ban
     $http.get("/User/GetListDepartment")
    .then(function (lstdpmBl) {
        $scope.lstDeparment = lstdpmBl.data;
+       var optiondefault = {
+           DepartmentId: -1,
+           Description: 'Tất cả'
+       }
+       $scope.lstDeparment[0] = optiondefault;
    });
     //load trạng thái
     $scope.lstStaus = [
         {
             Id: -1,
-            Value: "--Tất cả--"
+            Value: "Tất cả"
         },
         {
             Id: 0,
@@ -44,7 +55,6 @@ ngUsers.factory('dataService', function ($http) {
         })
         .success(function (data) {
             $scope.lstUserGroupName = data;
-            console.log($scope.lstUserGroupName);
         })
         .error(function () {
             console.log("Lỗi GetGroupNameByUserId " + userId);
@@ -85,6 +95,37 @@ ngUsers.factory('dataService', function ($http) {
             console.log("lỗi " + userId);
         });
     }
+    $scope.EditUser_Post = function () {
+        var userId = $scope.UserDetail.UserId;
+        var userName = $scope.UserDetail.Username;
+        var fullName = $scope.UserDetail.Fullname;
+        var email = $scope.UserDetail.Email;
+        var groupId = $scope.UserDetail.Group;
+        var departmentId = $scope.UserDetail.Department;
+        var status = $scope.UserDetail.Status;
+        alert("----userId: " + userId + "----Tên truy cập: " + userName + "------email: " + email + "-------Tên đầy đủ: " + fullName + "-------Nhóm quyền: " + groupId + "-----Phòng ban: " + departmentId +"-----Trạng thái: "+status);
+        $http({
+            method: 'POST',
+            url: '/User/UpdateUser',
+            data: {
+                'userId':userId,
+                'userName': userName,
+                'fullName': fullName,
+                'email': email,
+                'groupId': groupId,
+                'departmentId': departmentId,
+                'status': status
+            },
+        })
+        .success(function (data) {
+            alert(data.message);
+            $(".close").trigger("click");
+            window.location.reload();
+        })
+        .error(function () {
+            alert(data.message);
+        });
+    }
     //Reset Password
     $scope.ResetPass_Get = function (currentId) {
         $scope.currentId= currentId;
@@ -117,13 +158,58 @@ ngUsers.factory('dataService', function ($http) {
     }
 
     ////Create User
-    //$scope.Create = function () {
-    //    var userName = $scope.UserNameCreate;
-    //    var email = $scope.EmailCreate;
-    //    var fullName = $scope.FullNameCreate;
-    //    var groupId = $scope.GroupCreate;
-    //    alert("ahihi pass rồi !!!");
-    //};
+    $scope.Create_Post = function (User) {
+        var userName = User.UserNameCreate;
+        var fullName = User.FullNameCreate;
+        var email = User.EmailCreate;
+        var groupId = User.GroupCreate;
+        var departmentId = User.DepartmentCreate;
+        
+        alert("----userName: " + userName + "------email: " + email + "-------fullName: " + fullName + "-------groupId: " + groupId + "-----department: " + departmentId);
+
+        $http({
+            method: 'POST',
+            url: '/User/InsertUser',
+            data: {
+                'userName': userName,
+                'fullName': fullName,
+                'email': email,
+                'groupId': groupId,
+                'departmentId': departmentId
+            },
+        })
+        .success(function (data) {
+            alert(data.message);
+            $(".close").trigger("click");
+            window.location.reload();
+        })
+        .error(function () {
+            alert(data.message);
+        });
+    }
+
+    //Search
+    $scope.SearchUser = function (UserSearch) {
+        var userName = UserSearch.UserName;
+        var departmentId = UserSearch.Department;
+        var status = UserSearch.Status;
+        console.log(userName);
+        console.log(departmentId);
+        console.log(status);
+        
+        $http({
+            method: 'POST',
+            url: '/User/UserGetByCondition',
+            data: { 'userName': userName, 'departmentId': departmentId, 'status': status },
+        })
+        .success(function (data) {
+            console.log(data);
+        })
+        .error(function () {
+            console.log("Lỗi UserGetByCondition !!!");
+        });
+    }
+
 }).controller("ValidateData", function () {
 
 }).controller('Pagination', function ($scope, dataService) {

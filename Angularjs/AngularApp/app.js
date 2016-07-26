@@ -30,7 +30,7 @@ myApp2.controller("MayTinh", function ($scope) {
     };
 });
 //---------------------myApp3------------------------
-// toàn bộ nôi dung directive sẽ bị thay thế hết, ==> có thể áp dụng để reload trang  :D
+// toàn bộ nôi dung directive sẽ bị thay thế hết
 var myApp3 = angular.module("myApp3", []);
 myApp3.directive("ngFormlogin", function () {
     return {
@@ -43,7 +43,7 @@ myApp3.directive("ngFormlogin", function () {
 var myApp4 = angular.module("myApp4", []);
 myApp4.directive("ngFormlogin", function () {
     return {
-        templateUrl: "AngularApp/Templates/login_form.html"
+        templateUrl: "/AngularApp/Templates/login_form.html"
     };
 });
 myApp4.controller("LoginController", function ($scope) {

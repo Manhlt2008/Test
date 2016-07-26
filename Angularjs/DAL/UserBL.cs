@@ -70,14 +70,53 @@ namespace Angularjs.DAL
                     .Execute();
             }
         }
-        //public int InsertUser(int userId)
-        //{
-        //    using (var context = Angular.DAL.DBContext.MainDBContext.MainDB())
-        //    {
-        //        return context.StoredProcedure("Group_GetAll")
-        //            .QuerySingle<int>();
-                    
-        //    }
-        //}
+        public void UserInsert(string userName,string fullName,string password,string email,string groupId,
+                                int departmentId,int status,int location,DateTime createDate,DateTime updateTime)
+        {
+            using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())
+            {
+                context.StoredProcedure("User_Insert")
+                    .Parameter("Username", userName)
+                    .Parameter("Fullname", fullName)
+                    .Parameter("Password", password)
+                    .Parameter("Email", email)
+                    .Parameter("GroupId", groupId)
+                    .Parameter("DepartmentId", departmentId)
+                    .Parameter("Status", status)
+                    .Parameter("Location", location)
+                    .Parameter("CreateDate", createDate)
+                    .Parameter("UpdateTime", updateTime)
+                    .Execute();
+            }
+        }
+        public void UserUpdate(int userId,string userName, string fullName, string email, string groupId,
+                                int departmentId, int status, DateTime updateTime)
+        {
+            using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())
+            {
+                context.StoredProcedure("User_Update")
+                    .Parameter("UserId", userId)
+                    .Parameter("Username", userName)
+                    .Parameter("Fullname", fullName)
+                    .Parameter("Email", email)
+                    .Parameter("GroupId", groupId)
+                    .Parameter("DepartmentId", departmentId)
+                    .Parameter("Status", status)
+                    .Parameter("UpdateTime", updateTime)
+                    .Execute();
+            }
+        }
+
+        public List<User> Users_GetByCondition(string userName, int departmentId,int status)
+        {
+            using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())
+            {
+                return context.StoredProcedure("User_GetByCondition")
+                    .Parameter("UserName", userName)
+                    .Parameter("DepartmentId",departmentId)
+                    .Parameter("Status",status)
+                    .QueryMany<User>();
+            }
+        }
     }
 }
