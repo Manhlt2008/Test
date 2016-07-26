@@ -18,9 +18,9 @@
                     <input type="text" class="form-control input-sm">
                 </div>
                 <div class="form-group m-r-5">
-                    <label for="">Nhóm:</label>
+                    <label for="">Phòng ban:</label>
                     <select class="form-control input-sm">
-                        <option ng-repeat="gr in lstUserGroup" value="{{gr.GroupId}}">{{gr.GroupName}}</option>
+                        <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                     </select>
                 </div>
                 <div class="form-group m-r-5">
@@ -29,7 +29,7 @@
                         <option ng-repeat="st in lstStaus" value="{{st.Id}}">{{st.Value}}</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="SearchUser()"><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
             </form>
         </div>
         <hr>
@@ -38,45 +38,68 @@
 
 
         <div class="table-responsive" ng-controller="Pagination">
-            <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>
+            @*<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>*@
+            <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pull-right mb10 pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center">UserId</th>
+                        <th class="text-center">STT</th>
                         <th>Tên truy cập</th>
                         <th>Họ và tên</th>
                         <th>Email</th>
-                        <th class="text-center">Nhóm quyền</th>
+                        <th class="text-center">Quyền</th>
                         <th class="text-center">Trạng thái</th>
                         <th class="text-center">Tác vụ</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="user in data.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
-                        @*<td class="text-center">{{$index + 1}}</td>*@
-                        <td class="text-center">{{user.UserId}}</td>
+                        <td class="text-center">{{$index + 1}}</td>
+                        @*<td class="text-center">{{user.UserId}}</td>*@
                         <td>{{user.Username}}</td>
                         <td>{{user.Fullname}}</td>
                         <td>{{user.Email}}</td>
-                        <td class="text-center"><a href="#">{{user.DepartmentId}}</a></td>
+                        <td class="text-center">
+                            <a class="cur-pointer" data-target="#modal-viewgroupname-member" data-toggle="modal" ng-click="ViewGroupName(user.UserId)">Xem</a>
+                        </td>
                         <td class="text-center">
                             <span class="{{user.Status==0?'text-green':'text-d-red'}}">
                                 {{user.Status==0?"Bình thường": "Khóa/Tạm dừng"}}
                             </span>
                         </td>
                         <td class="text-center">
-                            <a href="#"><i class="fa fa-lg fa-edit"></i></a>
+                            <a data-target="#modal-edit-member" data-toggle="modal" ng-click="EditUser_Get(user.UserId)">
+                                <i class="fa fa-lg fa-edit"></i>
+                            </a>
                             <a data-target="#modal-alert-del" data-toggle="modal" ng-click="setId(user.UserId)">
                                 <i class="fa fa-lg fa-trash-o"></i>
                             </a>
-                            <a href="#modal-reset-password" data-toggle="modal" ng-click="setId(user.UserId)">
+                            <a href="#modal-reset-password" data-toggle="modal" ng-click="ResetPass_Get(user.UserId)">
                                 <i class="fa fa-lg fa-key"></i>
                             </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>
+            @*<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>*@
+            <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pull-right mb10 pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
+        </div>
+        <div class="modal fade" id="modal-viewgroupname-member" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Thông báo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Bạn đang có các quyền sau:</strong></p>
+                        <div ng-repeat="gn in lstUserGroupName" value="{{gn.GroupId}}">- {{gn.GroupName}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Đóng lại</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal fade" id="modal-alert-del" data-backdrop="static">
             <div class="modal-dialog">
@@ -140,14 +163,14 @@
                 </div>*@
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Nhóm</label>
+                                <label for="" class="col-xs-4 control-label">Phòng ban</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="GroupCreate" required>
-                                        <option ng-repeat="gr in lstUserGroup" value="{{gr.GroupId}}">{{gr.GroupName}}</option>
+                                    <select class="form-control input-sm" @*ng-model="GroupCreate" required*@>
+                                        <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group none">
+                            <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
                                 <div class="col-xs-8">
                                     <ul class="tree-view-checkbox m-b-10">
@@ -159,6 +182,8 @@
                                         <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
                                         <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
                                     </ul>
+                                    <div ng-dropdown-multiselect="" options="lstUserGroup" selected-model="example1model"></div>
+
                                     <div class="text-center m-b-10"><i class="fa fa-caret-square-o-up fa-lg"></i>&nbsp;<i class="fa fa-caret-square-o-down fa-lg"></i></div>
                                     <ul class="tree-view-checkbox">
                                         <li><label>Publisher Admin</label></li>
@@ -201,50 +226,133 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="modal-edit-member" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Sửa thành viên</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST" class="form-horizontal" role="form" name="CreateForm" ng-controller="ValidateData">
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Tên truy cập</label>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control input-sm" ng-model="UserDetail.Username">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Email</label>
+                                <div class="col-xs-8">
+                                    <input type="email" class="form-control input-sm" ng-model="UserDetail.Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Tên đầy đủ</label>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control input-sm" ng-model="UserDetail.Fullname" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Nhóm</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" ng-model="GroupCreate" required>
+                                        <option ng-repeat="gr in lstUserGroup" value="{{gr.GroupId}}">{{gr.GroupName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Trạng thái</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" ng-model="UserDetail.Status" required>
+                                        <option value="0" {{UserDetail.Status= =0?"seleted":""}}>Bình thường</option>
+                                        <option value="1" {{UserDetail.Status= =1?"seleted":""}}>Khoá/tạm dừng</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8 col-xs-offset-4">
+                                    <button type="submit" class="btn btn-sm btn-primary" ng-click="EditUser_Post()"
+                                            ng-disabled="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid ||
+                                                         CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid ||
+                                                         CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid ">
+                                        <i class="fa fa-lg fa-plus-circle"></i>
+                                        &nbsp;Sửa
+                                    </button>
+                                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-times-circle"></i>&nbsp;Bỏ qua</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-reset-password" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Reset Password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST" class="form-horizontal" role="form" name="resetPassFrom" novalidate>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Tên truy cập</label>
+                                @*<div class="col-xs-8"><p class="form-control-static">Kieuvtm</p></div>*@
+                                <div class="col-xs-8"><p class="form-control-static">{{UserDetail.Username}}</p></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Email</label>
+                                <div class="col-xs-8"><p class="form-control-static">{{UserDetail.Email}}</p></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Họ và tên</label>
+                                <div class="col-xs-8"><p class="form-control-static">{{UserDetail.Fullname}}</p></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Mật khẩu</label>
+                                <div class="col-xs-8">
+                                    <input type="password" class="form-control input-sm" ng-model="NewPass" name="resetNewPass" placeholder='Mật khẩu mới' ng-minlength="6" required>
+                                </div>
+                                <div class="error" ng-show="resetPassFrom.resetNewPass.$error.required">
+                                    Bạn chưa nhập mật khẩu!
+                                </div>
+                                <div ng-show="resetPassFrom.resetNewPass.$error.minlength" class="error">
+                                    Mật khẩu phải dài hơn 6 ký tự!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-xs-4 control-label">Xác nhận mật khẩu</label>
+                                <div class="col-xs-8">
+                                    <input type="password" class="form-control input-sm" ng-model="confirm_resetNewPass" name="confirm_resetNewPass" placeholder='Xác nhận mật khẩu mới' required>
+                                </div>
+                                <div class="error" ng-show="resetPassFrom.confirm_resetNewPass.$error.required">
+                                    Bạn chưa xác nhận mật khẩu!
+                                </div>
+                                <div class="error" ng-show="NewPass != confirm_resetNewPass">
+                                    Xác nhận mật khẩu không đúng!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8 col-xs-offset-4">
+                                    <button type="submit" class="btn btn-sm btn-primary" ng-click="ResetPass_Post()"
+                                            ng-disabled="resetPassFrom.resetNewPass.$dirty && resetPassFrom.resetNewPass.$invalid ||
+                                                         resetPassFrom.confirm_resetNewPass.$dirty && resetPassFrom.confirm_resetNewPass.$invalid">
+                                        <i class="fa fa-check-circle"></i>&nbsp;Xác nhận
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times-circle"></i>&nbsp;Bỏ qua</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
     </div>
 
     
 
-    <div class="modal fade" id="modal-reset-password" data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Reset Password</h4>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST" class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label for="" class="col-xs-4 control-label">Tên truy cập</label>
-                            <div class="col-xs-8"><p class="form-control-static">Kieuvtm</p></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="" class="col-xs-4 control-label">Email</label>
-                            <div class="col-xs-8"><p class="form-control-static">kieuvtm@fpt.com.vn</p></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="" class="col-xs-4 control-label">Họ và tên</label>
-                            <div class="col-xs-8"><p class="form-control-static">Vỏ Thị Minh Kiều</p></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="" class="col-xs-4 control-label">Mật khẩu</label>
-                            <div class="col-xs-8"><input type="text" class="form-control input-sm"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="" class="col-xs-4 control-label">Xác nhận mật khẩu</label>
-                            <div class="col-xs-8"><input type="text" class="form-control input-sm"></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-8 col-xs-offset-4">
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check-circle"></i>&nbsp;Xác nhận</button>
-                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times-circle"></i>&nbsp;Bỏ qua</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    <!-- /.modal -->
 
     <div class="modal fade" id="modal-select-pb" data-backdrop="static">
         <div class="modal-dialog">

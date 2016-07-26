@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Angular.Models;
-using Angular.DAL;
+using Angularjs.Models;
+using Angularjs.DAL;
 
-namespace Angular.DAL
+namespace Angularjs.DAL
 {
     public class DepartmentBL
     {
         public List<Department> GetAllDepartment()
         {
-            using (var context = Angular.DAL.DBContext.MainDBContext.MainDB())
+            using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())
             {
                 return context.StoredProcedure("Department_GetAll").QueryMany<Department>();
             }

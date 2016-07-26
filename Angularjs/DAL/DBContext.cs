@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using FluentData;
 using System.Web;
-using Angular.Models;
+using Angularjs.Models;
 using System.Data.Entity;
 
-namespace Angular.DAL
+namespace Angularjs.DAL
 {
     public class DBContext : System.Data.Entity.DbContext
     {

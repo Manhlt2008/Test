@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Angular.Models
+namespace Angularjs.Models
 {
     public class User
     {
@@ -13,7 +13,9 @@ namespace Angular.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public string GroupId { get; set; }
+        public string GroupName { get; set; }
         public string DepartmentId { get; set; }
+        public string Description { get; set; }
         public int Status { get; set; }
         public int Location { get; set; }
         public DateTime CreateDate { get; set; }

@@ -11,10 +11,15 @@ ngUsers.factory('dataService', function ($http) {
    .then(function (response) {
        $scope.lstUser = response.data;
    });
-    //load nhóm
+    //load nhóm quyền
     $http.get("/User/GetUserGroup")
    .then(function (lstuserg) {
        $scope.lstUserGroup = lstuserg.data;
+   });
+    //load phòng ban
+    $http.get("/User/GetListDepartment")
+   .then(function (lstdpmBl) {
+       $scope.lstDeparment = lstdpmBl.data;
    });
     //load trạng thái
     $scope.lstStaus = [
@@ -31,16 +36,23 @@ ngUsers.factory('dataService', function ($http) {
             Value: "Khóa/Tạm dừng"
         }
     ]
+    $scope.ViewGroupName = function (currentId) {
+        $http({
+            method: 'POST',
+            url: '/User/GetGroupNameByUserId',
+            data: { 'userId': currentId },
+        })
+        .success(function (data) {
+            $scope.lstUserGroupName = data;
+            console.log($scope.lstUserGroupName);
+        })
+        .error(function () {
+            console.log("Lỗi GetGroupNameByUserId " + userId);
+        });
+    }
     $scope.setId = function (currentId) {
         $scope.currentId = currentId;
     }
-    $scope.submitForm = function (isValid) {
-        if (isValid) {
-            alert('các trường có dấu * bắt buộc');
-            return;
-        }
-
-    };
     //Delete User
     $scope.Delete = function () {
         var userId = $scope.currentId;
@@ -58,14 +70,60 @@ ngUsers.factory('dataService', function ($http) {
             console.log("Xóa lỗi " + userId);
         });
     };
-    //Create User
-    $scope.Create = function () {
-        var userName = $scope.UserNameCreate;
-        var email = $scope.EmailCreate;
-        var fullName = $scope.FullNameCreate;
-        var groupId = $scope.GroupCreate;
-        alert("ahihi pass rồi !!!");
-    };
+    //Edit User
+    $scope.EditUser_Get = function (currentId) {
+        $http({
+            method: 'POST',
+            url: '/User/GetByUserId',
+            data: { 'userId': currentId },
+        })
+        .success(function (data) {
+            $scope.UserDetail = data;
+            console.log($scope.UserDetail);
+        })
+        .error(function () {
+            console.log("lỗi " + userId);
+        });
+    }
+    //Reset Password
+    $scope.ResetPass_Get = function (currentId) {
+        $scope.currentId= currentId;
+        $http({
+            method: 'POST',
+            url: '/User/GetByUserId',
+            data: { 'userId': currentId },
+        })
+        .success(function (data) {
+            $scope.UserDetail = data;
+        })
+        .error(function () {
+            console.log("Lỗi GetByUserId:" + userId);
+        });
+    }
+    $scope.ResetPass_Post = function () {
+        var userId = $scope.currentId;
+        var newpass = $scope.NewPass;
+        $http({
+            method: 'POST',
+            url: '/User/ChangePassWord',
+            data: { 'userId': userId, 'password': newpass },
+        })
+        .success(function (data) {
+            alert(data.message);
+        })
+        .error(function () {
+            alert(data.message);
+        });
+    }
+
+    ////Create User
+    //$scope.Create = function () {
+    //    var userName = $scope.UserNameCreate;
+    //    var email = $scope.EmailCreate;
+    //    var fullName = $scope.FullNameCreate;
+    //    var groupId = $scope.GroupCreate;
+    //    alert("ahihi pass rồi !!!");
+    //};
 }).controller("ValidateData", function () {
 
 }).controller('Pagination', function ($scope, dataService) {
@@ -92,6 +150,7 @@ ngUsers.factory('dataService', function ($http) {
             }
         };
         dataService.getSessions().success(handleSuccess);
-    });
+});
+
 
 
