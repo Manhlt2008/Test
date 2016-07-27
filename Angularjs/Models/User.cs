@@ -14,7 +14,7 @@ namespace Angularjs.Models
         public string Email { get; set; }
         public string GroupId { get; set; }
         public string GroupName { get; set; }
-        public string DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
         public int Location { get; set; }
