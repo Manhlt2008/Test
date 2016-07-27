@@ -32,7 +32,7 @@ myApp2.controller("MayTinh", function ($scope) {
 //---------------------myApp3------------------------
 // toàn bộ nôi dung directive sẽ bị thay thế hết
 var myApp3 = angular.module("myApp3", []);
-myApp3.directive("ngFormlogin", function () {
+myApp3.directive("ngFormlogin>", function () {
     return {
         template: "<b>Mời bạn nhập</b>"
             +"<input type='text' placeholder='Tên...'>"
@@ -84,7 +84,7 @@ var myApp7 = angular.module('myApp7', ['ngRoute']);
 myApp7.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-          template: "This is home page"
+          templateUrl: "/Templates/login_form.html"
       })
       .when("/List", {
           template: "This is List Page"  

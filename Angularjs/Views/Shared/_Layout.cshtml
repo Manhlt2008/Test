@@ -10,8 +10,10 @@
        
         <script src="~/AngularApp/Components/angular.min.js"></script>
         <script src="~/Scripts/angular-route.min.js"></script> @*add mới dùng được route*@
-        <script src="~/AngularApp/app.js"></script>
         <script src="~/AngularApp/master.js"></script>
+
+        <script src="~/AngularApp/app.js"></script>
+
         @*style*@
         <link href="~/Content/Styles/bootstrap.min.css" rel="stylesheet" />
         <link href="~/Content/Styles/polyad.css" rel="stylesheet" />
@@ -22,25 +24,7 @@
 
     </head>
     <body>
-        <header>
-            @*<div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>*@
-        </header>
+        <header></header>
         <div id="body">
             @RenderSection("featured", required: false)
             <section class="content-wrapper main-content clear-fix">
@@ -48,7 +32,7 @@
             </section>
         </div>
         <footer>
-            <div class="content-wrapper">
+            <div class="content-wrapper none">
                 <div class="float-left">
                     <p>&copy; @DateTime.Now.Year - FO</p>
                 </div>

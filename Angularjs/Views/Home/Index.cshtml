@@ -1,8 +1,22 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<div style="margin-left:30px;margin-top:10px;" ng-app="myApp" >
+    <div ng-controller="ShowMessage1">
+        {{message}}
+        <br />
+        <input type="text" ng-model="UserName" />
+        <br />
+        {{UserName}}
 
-<div style="margin-left:10px;" ng-app="myApp2" ng-controller="MayTinh">
+        {{data.content}}
+    </div>
+    <div ng-controller="ShowMessage2">
+        {{message}}
+    </div>
+</div>
+
+@*<div style="margin-left:10px;" ng-app="myApp2" ng-controller="MayTinh">
     <br />
     <input type="text" ng-model="so1" />
     <br />
@@ -18,7 +32,7 @@
     </select>
     <button ng-click="ThucHien()">Kết quả</button>
     {{ketqua}}
-</div>
+</div>*@
 @*<div ng-app="myApp7">
     <div ng-controller="DetailController">
         <div style="height:200px;background-color:#808080">
@@ -46,7 +60,7 @@
 </div>*@
 <div ng-app="myApp3">
     <div ng-formlogin>
-
+        
     </div>
 </div>
 

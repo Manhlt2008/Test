@@ -19,16 +19,9 @@
                 </div>
                 <div class="form-group m-r-5">
                     <label for="">Phòng ban:</label> 
-                    <select class="form-control input-sm" ng-model="UserSearch.Department" ng-init="UserSearch.Department='-1'">
-                        @*<option value="-1" class="ng-binding ng-scope">Tất cả</option>*@
-
+                    <select class="form-control input-sm" ng-model="UserSearch.DepartmentId" ng-init="UserSearch.DepartmentId='-1'">
                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                     </select>
-                    @*<select class="form-control input-sm" ng-model="UserSearch.Department"
-                            ng-options="dpm.DepartmentId as dpm.Description for dpm in lstDeparment">
-                        <option style="display:none" value="">Tất cả</option>
-                    </select>*@
-                    
                 </div>
                 <div class="form-group m-r-5">
                     <label for="">Trạng thái:</label>
@@ -43,9 +36,8 @@
         <a href="#modal-create-member" class="btn btn-sm btn-primary pull-right m-b-10" data-toggle="modal"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Thêm thành viên</a>
 
 
-
+        @*List View*@
         <div class="table-responsive" ng-controller="Pagination">
-            @*<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>*@
             <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pull-right mb10 pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
             <table class="table table-hover table-bordered">
                 <thead>
@@ -61,8 +53,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="user in data.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
-                        <td class="text-center">{{$index + 1}}</td>
-                        @*<td class="text-center">{{user.UserId}}</td>*@
+                        <td class="text-center">{{($index+1)+(currentPage-1)*itemsPerPage}}</td>
                         <td>{{user.Username}}</td>
                         <td>{{user.Fullname}}</td>
                         <td>{{user.Email}}</td>
@@ -75,22 +66,22 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <a data-target="#modal-edit-member" data-toggle="modal" ng-click="EditUser_Get(user.UserId)">
+                            <a class="cur-pointer" data-target="#modal-edit-member" data-toggle="modal" ng-click="EditUser_Get(user.UserId)">
                                 <i class="fa fa-lg fa-edit"></i>
                             </a>
-                            <a data-target="#modal-alert-del" data-toggle="modal" ng-click="setId(user.UserId)">
+                            <a class="cur-pointer" data-target="#modal-alert-del" data-toggle="modal" ng-click="setId(user.UserId)">
                                 <i class="fa fa-lg fa-trash-o"></i>
                             </a>
-                            <a href="#modal-reset-password" data-toggle="modal" ng-click="ResetPass_Get(user.UserId)">
+                            <a class="cur-pointer" href="#modal-reset-password" data-toggle="modal" ng-click="ResetPass_Get(user.UserId)">
                                 <i class="fa fa-lg fa-key"></i>
                             </a>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            @*<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pull-right mb10 pagination-sm" items-per-page="itemsPerPage"></pagination>*@
             <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pull-right mb10 pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
         </div>
+        @*View role*@
         <div class="modal fade" id="modal-viewgroupname-member" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -108,6 +99,7 @@
                 </div>
             </div>
         </div>
+        @*Delete Form*@
         <div class="modal fade" id="modal-alert-del" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -126,6 +118,7 @@
                 </div>
             </div>
         </div>
+        @*Create Form*@
         <div class="modal fade" id="modal-create-member" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -138,7 +131,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Tên truy cập</label>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control input-sm" ng-model="User.UserNameCreate" name="UserNameCreate" required>
+                                    <input type="text" class="form-control input-sm" ng-model="User.UserName" name="UserNameCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid">
                                     <span ng-show="CreateForm.UserNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
@@ -147,7 +140,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Email</label>
                                 <div class="col-xs-8">
-                                    <input type="email" class="form-control input-sm" ng-model="User.EmailCreate" name="EmailCreate" required>
+                                    <input type="email" class="form-control input-sm" ng-model="User.Email" name="EmailCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid">
                                     <span ng-show="CreateForm.EmailCreate.$error.required">Bạn chưa nhập email</span>
@@ -157,7 +150,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Họ và tên</label>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control input-sm" ng-model="User.FullNameCreate" name="FullNameCreate" required>
+                                    <input type="text" class="form-control input-sm" ng-model="User.FullName" name="FullNameCreate" required>
                                 </div>
                                 <span class="error" ng-show="CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid">
                                     <span ng-show="CreateForm.FullNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
@@ -172,7 +165,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Phòng ban</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="User.DepartmentCreate" ng-init="User.DepartmentCreate='-1'" required>
+                                    <select class="form-control input-sm" ng-model="User.DepartmentId" ng-init="User.DepartmentId='-1'" required>
                                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                                     </select>
                                 </div>
@@ -180,9 +173,13 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="User.GroupCreate" required ng-init="User.GroupCreate='31'">
+                                    <select class="form-control input-sm" ng-model="User.GroupId" required ng-init="User.GroupId='31'">
                                         <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
                                     </select>
+
+                                    @*<div ng-dropdown-multiselect="" extra-settings="dropdownSetting"
+                                         options="Categories" selected-model="CategoriesSelected" checkboxes="true">
+                                    </div>*@
                                     @*<ul class="tree-view-checkbox m-b-10">
                         <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
                         <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
@@ -236,6 +233,7 @@
                 </div>
             </div>
         </div>
+        @*Edit Form*@
         <div class="modal fade" id="modal-edit-member" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -244,7 +242,7 @@
                         <h4 class="modal-title">Sửa thành viên</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" class="form-horizontal" role="form" name="CreateForm" ng-controller="ValidateData">
+                        <form class="form-horizontal" role="form" name="EditForm" ng-submit="EditUser_Post(UserDetail)">
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Tên truy cập</label>
                                 <div class="col-xs-8">
@@ -266,7 +264,7 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Phòng ban</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="UserDetail.Department" required ng-init="UserDetail.Department='{{UserDetail.DepartmentId}}'">
+                                    <select class="form-control input-sm" ng-model="UserDetail.DepartmentId" required ng-init="UserDetail.DepartmentId='{{UserDetail.DepartmentId}}'">
                                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
                                     </select>
                                 </div>
@@ -274,23 +272,23 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="UserDetail.Group" required>
+                                    <select class="form-control input-sm" ng-model="UserDetail.GroupId" required ng-init="UserDetail.Group='UserDetail.GroupId'">
                                         <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Trạng thái</label>
+                                <label for="" class="col-xs-4 control-label">Trạng thái </label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="UserDetail.Status" required>
-                                        <option value="0" {{UserDetail.Status= =0?"seleted":""}}>Bình thường</option>
-                                        <option value="1" {{UserDetail.Status= =1?"seleted":""}}>Khoá/tạm dừng</option>
+                                    <select class="form-control input-sm" ng-model="UserDetail.Status" required ng-init="UserDetail.Status='{{UserDetail.Status}}'">
+                                        <option value="0">Bình thường</option>
+                                        <option value="1">Khoá/tạm dừng</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-8 col-xs-offset-4">
-                                    <button type="submit" class="btn btn-sm btn-primary" ng-click="EditUser_Post()"
+                                    <button type="submit" class="btn btn-sm btn-primary"
                                             ng-disabled="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid ||
                                                          CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid ||
                                                          CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid ">
@@ -305,6 +303,7 @@
                 </div>
             </div>
         </div>
+        @*Reset Form*@
         <div class="modal fade" id="modal-reset-password" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -316,7 +315,6 @@
                         <form action="" method="POST" class="form-horizontal" role="form" name="resetPassFrom" novalidate>
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Tên truy cập</label>
-                                @*<div class="col-xs-8"><p class="form-control-static">Kieuvtm</p></div>*@
                                 <div class="col-xs-8"><p class="form-control-static">{{UserDetail.Username}}</p></div>
                             </div>
                             <div class="form-group">
@@ -363,15 +361,28 @@
                             </div>
                         </form>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
+                </div>
+            </div>
+        </div>
+        @*Alert*@
+        <a data-target="#modal-alert" data-toggle="modal" id="divalert"></a>
+        <div class="modal fade" id="modal-alert" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Thông báo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>{{alert}}</strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" ng-click="ClosePopup()">Đóng</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    
-
-    <!-- /.modal -->
-
     <div class="modal fade" id="modal-select-pb" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">

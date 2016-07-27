@@ -32,10 +32,10 @@ namespace Angularjs.Controllers
             var lstdpmBl = dpmBl.GetAllDepartment();
             return Json(lstdpmBl, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UserGetByCondition(string userName, int departmentId, int status)
+        public JsonResult UserGetByCondition(User user)
         {
             var userBl = new UserBL();
-            var lstUser = userBl.Users_GetByCondition(userName, departmentId, status);
+            var lstUser = userBl.Users_GetByCondition(user.Username,user.DepartmentId,user.Status);
             return Json(lstUser, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetUserGroup()
@@ -86,14 +86,13 @@ namespace Angularjs.Controllers
             }
             return Json(new { message }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult InsertUser(string userName, string fullName, string password, string email, string groupId,
-                                int departmentId)
+        public JsonResult InsertUser(User user)
         {
             var userBl = new UserBL();
             string message = string.Empty;
             try
             {
-                userBl.UserInsert(userName, fullName, Crytography.MD5Hash("123456"), email, groupId, departmentId, 0, 0, DateTime.Now, DateTime.Now);
+                userBl.UserInsert(user.Username, user.Fullname, Crytography.MD5Hash("123456"), user.Email, user.GroupId, user.DepartmentId, 0, 0, DateTime.Now, DateTime.Now);
                 message = "Thêm mới User thành công!!!";
             }
             catch (Exception)
@@ -102,15 +101,14 @@ namespace Angularjs.Controllers
             }
             return Json(new { message }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UpdateUser(int userId,string userName, string fullName, string email, string groupId,
-                                int departmentId, int status)
+        public JsonResult UpdateUser(User user)
         {
             var userBl = new UserBL();
             string message = string.Empty;
             try
             {
-                userBl.UserUpdate(userId, userName, fullName, email, groupId, departmentId, status, DateTime.Now);
-                message = "Update User thành công!!!";
+                userBl.UserUpdate(user.UserId, user.Username, user.Fullname, user.Email, user.GroupId, user.DepartmentId, user.Status, DateTime.Now);
+                message = "Cập nhật User thành công!!!";
             }
             catch (Exception)
             {

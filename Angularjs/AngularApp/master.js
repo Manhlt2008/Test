@@ -16,11 +16,6 @@ ngUsers.factory('dataService', function ($http) {
     $http.get("/User/GetUserGroup")
    .then(function (lstuserg) {
        $scope.lstUserGroup = lstuserg.data;
-       //var optiondefault = {
-       //    GroupId: -1,
-       //    GroupName: 'Tất cả'
-       //}
-       //$scope.lstUserGroup[0] = optiondefault;
    });
     //load phòng ban
     $http.get("/User/GetListDepartment")
@@ -47,6 +42,7 @@ ngUsers.factory('dataService', function ($http) {
             Value: "Khóa/Tạm dừng"
         }
     ]
+
     $scope.ViewGroupName = function (currentId) {
         $http({
             method: 'POST',
@@ -88,43 +84,34 @@ ngUsers.factory('dataService', function ($http) {
             data: { 'userId': currentId },
         })
         .success(function (data) {
+            data.DepartmentId = data.DepartmentId.toString();
+            data.Status = data.Status.toString();
             $scope.UserDetail = data;
-            console.log($scope.UserDetail);
         })
         .error(function () {
             console.log("lỗi " + userId);
         });
     }
-    $scope.EditUser_Post = function () {
-        var userId = $scope.UserDetail.UserId;
-        var userName = $scope.UserDetail.Username;
-        var fullName = $scope.UserDetail.Fullname;
-        var email = $scope.UserDetail.Email;
-        var groupId = $scope.UserDetail.Group;
-        var departmentId = $scope.UserDetail.Department;
-        var status = $scope.UserDetail.Status;
-        alert("----userId: " + userId + "----Tên truy cập: " + userName + "------email: " + email + "-------Tên đầy đủ: " + fullName + "-------Nhóm quyền: " + groupId + "-----Phòng ban: " + departmentId +"-----Trạng thái: "+status);
+    $scope.EditUser_Post = function (UserDetail) {
+        console.log(UserDetail);
         $http({
             method: 'POST',
             url: '/User/UpdateUser',
-            data: {
-                'userId':userId,
-                'userName': userName,
-                'fullName': fullName,
-                'email': email,
-                'groupId': groupId,
-                'departmentId': departmentId,
-                'status': status
-            },
+            data: UserDetail
         })
         .success(function (data) {
-            alert(data.message);
-            $(".close").trigger("click");
-            window.location.reload();
+            $scope.alert = data.message;
+            $("#divalert").trigger("click");
+            //$(".close").trigger("click");
+            //window.location.reload();
         })
         .error(function () {
             alert(data.message);
         });
+    }
+    $scope.ClosePopup = function () {
+        $(".close").trigger("click");
+        window.location.reload();
     }
     //Reset Password
     $scope.ResetPass_Get = function (currentId) {
@@ -159,24 +146,10 @@ ngUsers.factory('dataService', function ($http) {
 
     ////Create User
     $scope.Create_Post = function (User) {
-        var userName = User.UserNameCreate;
-        var fullName = User.FullNameCreate;
-        var email = User.EmailCreate;
-        var groupId = User.GroupCreate;
-        var departmentId = User.DepartmentCreate;
-        
-        alert("----userName: " + userName + "------email: " + email + "-------fullName: " + fullName + "-------groupId: " + groupId + "-----department: " + departmentId);
-
         $http({
             method: 'POST',
             url: '/User/InsertUser',
-            data: {
-                'userName': userName,
-                'fullName': fullName,
-                'email': email,
-                'groupId': groupId,
-                'departmentId': departmentId
-            },
+            data:User
         })
         .success(function (data) {
             alert(data.message);
@@ -190,17 +163,13 @@ ngUsers.factory('dataService', function ($http) {
 
     //Search
     $scope.SearchUser = function (UserSearch) {
-        var userName = UserSearch.UserName;
-        var departmentId = UserSearch.Department;
-        var status = UserSearch.Status;
         console.log(userName);
         console.log(departmentId);
         console.log(status);
-        
         $http({
             method: 'POST',
             url: '/User/UserGetByCondition',
-            data: { 'userName': userName, 'departmentId': departmentId, 'status': status },
+            data: UserSearch
         })
         .success(function (data) {
             console.log(data);
