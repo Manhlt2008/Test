@@ -5,6 +5,11 @@
     margin-bottom:10px !important;
 }
 .error{
+    color: #f00;
+    margin-left: 36%;
+    margin-top: 30px;
+    margin-bottom: -5px;
+}
+.req{
     color:#f00;
-    margin-left:36%;
 }

@@ -129,41 +129,35 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form" name="CreateForm" ng-submit="Create_Post(User)">
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Tên truy cập</label>
+                                <label for="" class="col-xs-4 control-label">Tên truy cập <span class="req">*</span></label>
                                 <div class="col-xs-8">
                                     <input type="text" class="form-control input-sm" ng-model="User.UserName" name="UserNameCreate" required>
                                 </div>
-                                <span class="error" ng-show="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid">
-                                    <span ng-show="CreateForm.UserNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
-                                </span>
+                                <div class="error" ng-show="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid">
+                                    <span ng-show="CreateForm.UserNameCreate.$error.required">Bạn chưa nhập tên truy cập.</span>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Email</label>
+                                <label for="" class="col-xs-4 control-label">Email <span class="req">*</span></label>
                                 <div class="col-xs-8">
                                     <input type="email" class="form-control input-sm" ng-model="User.Email" name="EmailCreate" required>
                                 </div>
-                                <span class="error" ng-show="CreateForm.EmailCreate.$dirty && CreateForm.EmailCreate.$invalid">
-                                    <span ng-show="CreateForm.EmailCreate.$error.required">Bạn chưa nhập email</span>
-                                    <span ng-show="CreateForm.EmailCreate.$error.email">Email không hợp lệ</span>
-                                </span>
+                                <div class="error" ng-show="CreateForm.EmailCreate.$touched && CreateForm.EmailCreate.$invalid">
+                                    <span ng-show="CreateForm.EmailCreate.$error.required">Bạn chưa nhập email.</span>
+                                    <span ng-show="CreateForm.EmailCreate.$error.email">Email không hợp lệ.</span>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Họ và tên</label>
+                                <label for="" class="col-xs-4 control-label">Họ và tên <span class="req">*</span></label>
                                 <div class="col-xs-8">
                                     <input type="text" class="form-control input-sm" ng-model="User.FullName" name="FullNameCreate" required>
                                 </div>
-                                <span class="error" ng-show="CreateForm.FullNameCreate.$dirty && CreateForm.FullNameCreate.$invalid">
-                                    <span ng-show="CreateForm.FullNameCreate.$error.required">Bạn chưa nhập tên truy cập</span>
-                                </span>
-                                @*<div class="col-xs-4">
-                    <input type="text" class="form-control input-sm" placeholder="Họ và tên đệm">
-                </div>
-                <div class="col-xs-4">
-                    <input type="text" class="form-control input-sm" placeholder="Tên">
-                </div>*@
+                                <div class="error" ng-show="CreateForm.FullNameCreate.$touched && CreateForm.FullNameCreate.$invalid">
+                                    <span ng-show="CreateForm.FullNameCreate.$error.required">Bạn chưa nhập họ và tên.</span>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Phòng ban</label>
+                                <label for="" class="col-xs-4 control-label">Phòng ban <span class="req">*</span></label>
                                 <div class="col-xs-8">
                                     <select class="form-control input-sm" ng-model="User.DepartmentId" ng-init="User.DepartmentId='-1'" required>
                                         <option ng-repeat="dpm in lstDeparment" value="{{dpm.DepartmentId}}">{{dpm.Description}}</option>
@@ -171,7 +165,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
+                                <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng <span class="req">*</span></label>
                                 <div class="col-xs-8">
                                     <select class="form-control input-sm" ng-model="User.GroupId" required ng-init="User.GroupId='31'">
                                         <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
@@ -303,7 +297,7 @@
                 </div>
             </div>
         </div>
-        @*Reset Form*@
+        @*ResetPass Form*@
         <div class="modal fade" id="modal-reset-password" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -330,10 +324,10 @@
                                 <div class="col-xs-8">
                                     <input type="password" class="form-control input-sm" ng-model="NewPass" name="resetNewPass" placeholder='Mật khẩu mới' ng-minlength="6" required>
                                 </div>
-                                <div class="error" ng-show="resetPassFrom.resetNewPass.$error.required">
+                                <div class="error" ng-show="resetPassFrom.resetNewPass.$touched && resetPassFrom.resetNewPass.$error.required">
                                     Bạn chưa nhập mật khẩu!
                                 </div>
-                                <div ng-show="resetPassFrom.resetNewPass.$error.minlength" class="error">
+                                <div class="error" ng-show="resetPassFrom.resetNewPass.$invalid && resetPassFrom.resetNewPass.$touched && resetPassFrom.resetNewPass.$error.minlength">
                                     Mật khẩu phải dài hơn 6 ký tự!
                                 </div>
                             </div>
@@ -342,7 +336,7 @@
                                 <div class="col-xs-8">
                                     <input type="password" class="form-control input-sm" ng-model="confirm_resetNewPass" name="confirm_resetNewPass" placeholder='Xác nhận mật khẩu mới' required>
                                 </div>
-                                <div class="error" ng-show="resetPassFrom.confirm_resetNewPass.$error.required">
+                                <div class="error" ng-show="resetPassFrom.confirm_resetNewPass.$touched && resetPassFrom.confirm_resetNewPass.$invalid">
                                     Bạn chưa xác nhận mật khẩu!
                                 </div>
                                 <div class="error" ng-show="NewPass != confirm_resetNewPass">
@@ -352,8 +346,8 @@
                             <div class="form-group">
                                 <div class="col-xs-8 col-xs-offset-4">
                                     <button type="submit" class="btn btn-sm btn-primary" ng-click="ResetPass_Post()"
-                                            ng-disabled="resetPassFrom.resetNewPass.$dirty && resetPassFrom.resetNewPass.$invalid ||
-                                                         resetPassFrom.confirm_resetNewPass.$dirty && resetPassFrom.confirm_resetNewPass.$invalid">
+                                            ng-disabled="resetPassFrom.resetNewPass.$touched  && resetPassFrom.resetNewPass.$invalid ||
+                                                         resetPassFrom.confirm_resetNewPass.$touched  && resetPassFrom.confirm_resetNewPass.$invalid">
                                         <i class="fa fa-check-circle"></i>&nbsp;Xác nhận
                                     </button>
                                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times-circle"></i>&nbsp;Bỏ qua</button>
@@ -366,8 +360,8 @@
         </div>
         @*Alert*@
         <a data-target="#modal-alert" data-toggle="modal" id="divalert"></a>
-        <div class="modal fade" id="modal-alert" data-backdrop="static">
-            <div class="modal-dialog">
+        <div class="modal fade" id="modal-alert" data-backdrop="static" >
+            <div class="modal-dialog" style="width:400px;margin-top:100px;">
                 <div class="modal-content">
                     <div class="modal-header bg-danger">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

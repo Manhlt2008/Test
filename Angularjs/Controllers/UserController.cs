@@ -93,7 +93,7 @@ namespace Angularjs.Controllers
             try
             {
                 userBl.UserInsert(user.Username, user.Fullname, Crytography.MD5Hash("123456"), user.Email, user.GroupId, user.DepartmentId, 0, 0, DateTime.Now, DateTime.Now);
-                message = "Thêm mới User thành công!!!";
+                message = "Thêm mới user thành công!!!";
             }
             catch (Exception)
             {
@@ -108,7 +108,7 @@ namespace Angularjs.Controllers
             try
             {
                 userBl.UserUpdate(user.UserId, user.Username, user.Fullname, user.Email, user.GroupId, user.DepartmentId, user.Status, DateTime.Now);
-                message = "Cập nhật User thành công!!!";
+                message = "Cập nhật user thành công!!!";
             }
             catch (Exception)
             {

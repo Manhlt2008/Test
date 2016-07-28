@@ -102,8 +102,6 @@ ngUsers.factory('dataService', function ($http) {
         .success(function (data) {
             $scope.alert = data.message;
             $("#divalert").trigger("click");
-            //$(".close").trigger("click");
-            //window.location.reload();
         })
         .error(function () {
             alert(data.message);
@@ -123,6 +121,8 @@ ngUsers.factory('dataService', function ($http) {
         })
         .success(function (data) {
             $scope.UserDetail = data;
+            $scope.NewPass = "";
+            $scope.confirm_resetNewPass = "";
         })
         .error(function () {
             console.log("Lỗi GetByUserId:" + userId);
@@ -152,9 +152,11 @@ ngUsers.factory('dataService', function ($http) {
             data:User
         })
         .success(function (data) {
-            alert(data.message);
-            $(".close").trigger("click");
-            window.location.reload();
+            //alert(data.message);
+            //$(".close").trigger("click");
+            //window.location.reload();
+            $scope.alert = data.message;
+            $("#divalert").trigger("click");
         })
         .error(function () {
             alert(data.message);
