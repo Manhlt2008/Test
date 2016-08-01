@@ -139,6 +139,9 @@
                                 <div class="error" ng-show="CreateForm.UserNameCreate.$dirty && CreateForm.UserNameCreate.$invalid">
                                     <span ng-show="CreateForm.UserNameCreate.$error.required">Bạn chưa nhập tên truy cập.</span>
                                 </div>
+                                <div class="error" Id="checkUserName">
+                                    <span>{{User.UserMessage}}</span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Email <span class="req">*</span></label>

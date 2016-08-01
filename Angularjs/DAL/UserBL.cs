@@ -60,6 +60,23 @@ namespace Angularjs.DAL
             }
             return new User();
         }
+        public int CheckUserName(string userName)
+        {
+            try
+            {
+                using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())
+                {
+                    return context.StoredProcedure("User_CheckUserName")
+                        .Parameter("Username", userName)
+                        .QuerySingle<int>();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return 0;
+        }
         public void ChangePassWord(int userId, string pass)
         {
             using (var context = Angularjs.DAL.DBContext.MainDBContext.MainDB())

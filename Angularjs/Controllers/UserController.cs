@@ -89,17 +89,26 @@ namespace Angularjs.Controllers
         public JsonResult InsertUser(User user)
         {
             var userBl = new UserBL();
-            string message = string.Empty;
+            int flag=1;
             try
             {
-                userBl.UserInsert(user.Username, user.Fullname, Crytography.MD5Hash("123456"), user.Email, user.GroupId, user.DepartmentId, 0, 0, DateTime.Now, DateTime.Now);
-                message = "Thêm mới user thành công!!!";
+                var check = userBl.CheckUserName(user.Username);
+                if (check==1)
+                {
+                    flag = 1;
+                }
+                else
+                {
+                    userBl.UserInsert(user.Username, user.Fullname, Crytography.MD5Hash("123456"), user.Email, user.GroupId, user.DepartmentId, 0, 0, DateTime.Now, DateTime.Now);
+                    flag = 0;
+                }
+                
             }
             catch (Exception)
             {
-                message = "Có lỗi xảy ra, xin vui lòng thử lại";
+                flag = 1;
             }
-            return Json(new { message }, JsonRequestBehavior.AllowGet);
+            return Json(new { flag }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult UpdateUser(User user)
         {

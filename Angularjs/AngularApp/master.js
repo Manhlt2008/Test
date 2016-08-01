@@ -197,8 +197,14 @@ ngUsers.controller("ListUser", function ($scope, $http, dataService) {
             data: User
         })
         .success(function (data) {
-            $scope.alert = data.message;
-            $("#divalert").trigger("click");
+            if (data.flag == 1) {
+                $scope.User.UserMessage = "UserName này đã tồn tại trong hệ thống.";
+                $("#checkUserName").show();
+            }
+            else {
+                $scope.alert = data.message;
+                $("#divalert").trigger("click");
+            }
         })
         .error(function () {
             alert(data.message);
