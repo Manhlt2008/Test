@@ -1,13 +1,52 @@
 ﻿var ngUsers = angular.module("ngUsers", ['ui.bootstrap']);
-ngUsers.factory('dataService', function ($http) {
-
+ngUsers.factory('dataService', function ($http, broadcastService) {
     return {
-        getSessions: function () {
-            return $http.post('/User/GetListUsers');
+        search: function (UserSearch) {
+            $http({
+                method: 'POST',
+                url: '/User/UserGetByCondition',
+                data: UserSearch
+            })
+            .success(function (lstUserSearch) {
+                broadcastService.send('search', lstUserSearch);
+            })
+            .error(function () {
+                console.log("Lỗi UserGetByCondition !!!");
+            });
         }
-    };
-}).controller("ListUser", function ($scope, $http, dataService) {
-    
+    }
+});
+ngUsers.factory('broadcastService', function ($rootScope) {
+    return {
+        send: function (msg, data) {
+            $rootScope.$broadcast(msg, data);
+        }
+    }
+});
+ngUsers.controller("Pagination", function ($scope, dataService) {
+    $scope.$on('search', function (event, dataService) {
+        $scope.data = dataService;
+        $scope.viewby = 20;
+        $scope.totalItems = dataService.length;
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = $scope.viewby;
+        $scope.maxSize = 5; //Number of pager buttons to show
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+
+        $scope.pageChanged = function () {
+            //console.log('Page changed to: ' + $scope.currentPage);
+        };
+
+        $scope.setItemsPerPage = function (num) {
+            $scope.itemsPerPage = num;
+            $scope.currentPage = 1; //reset to first paghe
+        }
+    });
+});
+ngUsers.controller("ListUser", function ($scope, $http, dataService) {
     $http.get("/User/GetListUsers")
    .then(function (response) {
        $scope.lstUser = response.data;
@@ -70,7 +109,7 @@ ngUsers.factory('dataService', function ($http) {
         .success(function (data) {
             console.log("Xóa thành công userId " + userId);
             $(".close").trigger("click");
-            window.location.reload();
+            $scope.onSearchClick();
         })
         .error(function () {
             console.log("Xóa lỗi " + userId);
@@ -101,10 +140,15 @@ ngUsers.factory('dataService', function ($http) {
         })
         .success(function (data) {
             $scope.alert = data.message;
+            $scope.flag = 1;
+            $(".close").trigger("click");
             $("#divalert").trigger("click");
         })
         .error(function () {
             alert(data.message);
+            $scope.flag = 0;
+            $(".close").trigger("click");
+            $("#divalert").trigger("click");
         });
     }
     $scope.ClosePopup = function () {
@@ -113,7 +157,7 @@ ngUsers.factory('dataService', function ($http) {
     }
     //Reset Password
     $scope.ResetPass_Get = function (currentId) {
-        $scope.currentId= currentId;
+        $scope.currentId = currentId;
         $http({
             method: 'POST',
             url: '/User/GetByUserId',
@@ -138,6 +182,7 @@ ngUsers.factory('dataService', function ($http) {
         })
         .success(function (data) {
             alert(data.message);
+            $scope.onSearchClick();
         })
         .error(function () {
             alert(data.message);
@@ -149,12 +194,9 @@ ngUsers.factory('dataService', function ($http) {
         $http({
             method: 'POST',
             url: '/User/InsertUser',
-            data:User
+            data: User
         })
         .success(function (data) {
-            //alert(data.message);
-            //$(".close").trigger("click");
-            //window.location.reload();
             $scope.alert = data.message;
             $("#divalert").trigger("click");
         })
@@ -165,49 +207,25 @@ ngUsers.factory('dataService', function ($http) {
 
     //Search
     $scope.SearchUser = function (UserSearch) {
-        console.log(userName);
-        console.log(departmentId);
-        console.log(status);
+        console.log(UserSearch)
         $http({
             method: 'POST',
             url: '/User/UserGetByCondition',
             data: UserSearch
         })
-        .success(function (data) {
-            console.log(data);
+        .success(function (lstUserSearch) {
+            $scope.lstUser = lstUserSearch.data;
         })
         .error(function () {
             console.log("Lỗi UserGetByCondition !!!");
         });
     }
+    $scope.onSearchClick = function (UserSearch) {
+        dataService.search(UserSearch);
+    }
+    $scope.onSearchClick();
+})
 
-}).controller("ValidateData", function () {
-
-}).controller('Pagination', function ($scope, dataService) {
-        //panging
-        var handleSuccess = function (data, status) {
-            $scope.data = data;
-            $scope.viewby = 20;
-            $scope.totalItems = $scope.data.length;
-            $scope.currentPage = 1;
-            $scope.itemsPerPage = $scope.viewby;
-            $scope.maxSize = 5; //Number of pager buttons to show
-
-            $scope.setPage = function (pageNo) {
-                $scope.currentPage = pageNo;
-            };
-
-            $scope.pageChanged = function () {
-                //console.log('Page changed to: ' + $scope.currentPage);
-            };
-
-            $scope.setItemsPerPage = function (num) {
-                $scope.itemsPerPage = num;
-                $scope.currentPage = 1; //reset to first paghe
-            }
-        };
-        dataService.getSessions().success(handleSuccess);
-});
 
 
 

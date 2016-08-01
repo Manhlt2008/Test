@@ -4,6 +4,7 @@
 }
 @*pagging*@
 <script src="~/AngularApp/ui-bootstrap-tpls-0.11.0.js"></script>
+<script src="~/AngularApp/master.js"></script>
 @*pagging*@
 
 <div class="page-co-che-qc col-xs-12" ng-app="ngUsers">
@@ -12,7 +13,7 @@
     </div>
     <div ng-controller="ListUser">
         <div class="filter-bar">
-            <form class="form-inline" role="form" ng-submit="SearchUser(UserSearch)">
+            <form class="form-inline" role="form" @*ng-submit="SearchUser(UserSearch)"*@>
                 <div class="form-group m-r-5">
                     <label for="">Tên truy cập:</label>
                     <input type="text" class="form-control input-sm" ng-model="UserSearch.UserName">
@@ -29,7 +30,7 @@
                         <option ng-repeat="st in lstStaus" value="{{st.Id}}">{{st.Value}}</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-sm btn-primary" @*ng-click="SearchUser()"*@><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
+                <button type="submit" class="btn btn-sm btn-primary" ng-click="onSearchClick(UserSearch)"><i class="fa fa-search"></i>&nbsp;Tìm kiếm</button>
             </form>
         </div>
         <hr>
@@ -38,6 +39,8 @@
 
         @*List View*@
         <div class="table-responsive" ng-controller="Pagination">
+            <span class="float-left none">Có <b>{{ totalItems }} </b>kết quả được tìm thấy.</span>
+            Xem <select ng-model="viewby" ng-change="setItemsPerPage(viewby)"><option>05</option><option>10</option><option>15</option><option>20</option><option>25</option><option>30</option><option>40</option><option>50</option></select> bản ghi trên 1 trang.
             <pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pull-right mb10 pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="itemsPerPage"></pagination>
             <table class="table table-hover table-bordered">
                 <thead>
@@ -51,7 +54,7 @@
                         <th class="text-center">Tác vụ</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="lstUserSearch">
                     <tr ng-repeat="user in data.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
                         <td class="text-center">{{($index+1)+(currentPage-1)*itemsPerPage}}</td>
                         <td>{{user.Username}}</td>
@@ -363,12 +366,11 @@
         <div class="modal fade" id="modal-alert" data-backdrop="static" >
             <div class="modal-dialog" style="width:400px;margin-top:100px;">
                 <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="modal-header {{flag==0?'bg-primary':'bg-danger'}} ">
                         <h4 class="modal-title">Thông báo</h4>
                     </div>
                     <div class="modal-body">
-                        <p><strong>{{alert}}</strong></p>
+                        <p><strong>{{alert}} + {{flag}}</strong></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" ng-click="ClosePopup()">Đóng</button>

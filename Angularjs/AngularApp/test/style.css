@@ -1,0 +1,19 @@
+/* Styles go here */
+
+.search-panel-style {
+    background-color: #4F7BA9;
+    padding-top: 0;
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+.search-list-style {
+    border: 2px solid #205081;
+    border-radius: 5px;
+    padding-top: 15px;
+}
+
+.div-margin {
+    margin: 0 15px !important;
+    padding: 0 !important;
+}

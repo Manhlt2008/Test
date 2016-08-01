@@ -181,6 +181,12 @@
     <Content Include="AngularApp\main-script.js" />
     <Content Include="AngularApp\master.js" />
     <Content Include="AngularApp\Templates\login_form.html" />
+    <Content Include="AngularApp\test\About.js" />
+    <Content Include="AngularApp\test\angular.js" />
+    <Content Include="AngularApp\test\bootstrap.css" />
+    <Content Include="AngularApp\test\JavaScript.js" />
+    <Content Include="AngularApp\test\style.css" />
+    <Content Include="AngularApp\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="AngularApp\ui-bootstrap-tpls-0.11.0.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
