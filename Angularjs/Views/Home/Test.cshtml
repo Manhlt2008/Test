@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Test";
+}
+<script src="~/AngularApp/test/UsersTest.js"></script>
+<div ng-app="ngUser">
+    <div class="modal-dialog">
+        <div class="modal-content" ng-controller="UserLogin">
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="LogInForm" @*ng-submit="LogIn_Post(UserLogIn)"*@>
+                    <div class="form-group">
+                        <label for="" class="col-xs-4 control-label">Email <span class="req">*</span></label>
+                        <div class="col-xs-8">
+                            <input type="email" class="form-control input-sm" ng-model="UserLogIn.Email" name="LogInEmail" required>
+                        </div>
+                        <div class="error" ng-show="LogInForm.LogInEmail.$touched && LogInForm.LogInEmail.$invalid">
+                            <span ng-show="LogInForm.LogInEmail.$touched && LogInForm.LogInEmai.$error.required">Bạn chưa nhập email.</span>
+                            <span ng-show="LogInForm.LogInEmail.$error.email">Email không hợp lệ.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-xs-4 control-label">Mật khẩu<span class="req">*</span></label>
+                        <div class="col-xs-8">
+                            <input type="password" class="form-control input-sm" ng-model="UserLogIn.Password" name="LogInPass" ng-minlength="6" ng-maxlength="20" required>
+                        </div>
+                        <div class="error" ng-show="LogInForm.LogInPass.$touched && LogInForm.LogInPass.$invalid && (LogInForm.LogInPass.$error.minlength || LogInForm.LogInPass.$error.maxlength)">
+                            <span ng-show="LogInForm.LogInPass.$error.required">Bạn chưa nhập mật khẩu.</span>
+                            <span ng-show="!LogInForm.LogInPass.$error.required && (LogInForm.LogInPass.$error.minlength || LogInForm.LogInPass.$error.maxlength)">Mật khẩu tối thiểu 6 đến 20 ký tự.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-8 col-xs-offset-4">
+                            <button type="submit" class="btn btn-sm btn-primary"
+                                    ng-disabled="LogInForm.$invalid ">
+                                <i class="fa fa-lg fa-plus-circle"></i>
+                                &nbsp;Đăng nhập
+                            </button>
+                            <button type="button" data-dismiss="modal" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-times-circle"></i>&nbsp;Bỏ qua</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
