@@ -176,7 +176,7 @@
                                     <ul class="tree-view-checkbox m-b-10">
                                         <li ng-repeat="u in lstUserGroup">
                                             <label>
-                                                <input id="{{u.GroupId}}" value="{{u.GroupName}}" type="checkbox" @*ng-checked="selection.indexOf(u.GroupId) > -1"*@ ng-click="toggleSelection(u.GroupId)">
+                                                <input id="{{u.GroupId}}" value="{{u.GroupName}}" type="checkbox" ng-click="toggleSelection(u.GroupId)">
                                                 {{u.GroupName}}
                                             </label>
                                         </li>
@@ -252,9 +252,14 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="UserDetail.GroupId" required ng-init="UserDetail.Group='UserDetail.GroupId'">
-                                        <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
-                                    </select>
+                                    <ul class="tree-view-checkbox m-b-10">
+                                        <li ng-repeat="u in lstUserGroup">
+                                            <label>
+                                                <input id="{{u.GroupId}}" value="{{u.GroupName}}" type="checkbox" ng-checked="UserDetail.GroupId.indexOf(u.GroupId) > -1" ng-click="toggleSelection(u.GroupId)">
+                                                {{u.GroupName}}
+                                            </label>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="form-group">

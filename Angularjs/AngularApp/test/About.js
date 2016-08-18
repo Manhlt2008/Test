@@ -187,17 +187,27 @@ ngUsers.controller("ListUser", function ($scope, $http, dataService) {
         });
     }
 
+    var selection = [];
+    $scope.toggleSelection = function toggleSelection(GroupId) {
+        var idx =selection.indexOf(GroupId);
+        if (idx > -1) {
+            selection.splice(idx, 1);
+        }
+        else {
+           selection.push(GroupId);
+        }
+        $scope.GroupIdSelected = selection.toString();
+    };
     ////Create User
     $scope.Create_Post = function (User) {
+        User.GroupId = $scope.GroupIdSelected;
+        console.log(User);
         $http({
             method: 'POST',
             url: '/User/InsertUser',
             data: User
         })
         .success(function (data) {
-            //alert(data.message);
-            //$(".close").trigger("click");
-            //window.location.reload();
             $scope.alert = data.message;
             $("#divalert").trigger("click");
         })

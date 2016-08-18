@@ -63,6 +63,12 @@
                             <span class="{{user.Status==0?'text-green':'text-d-red'}}">
                                 {{user.Status==0?"Bình thường": "Khóa/Tạm dừng"}}
                             </span>
+                            @*<span ng-if="user.Status" class="text-d-red">
+                                Khóa/Tạm dừng
+                            </span>
+                            <span ng-if="!user.Status" class="text-green">
+                                Bình thường
+                            </span>*@
                         </td>
                         <td class="text-center">
                             <a class="cur-pointer" data-target="#modal-edit-member" data-toggle="modal" ng-click="EditUser_Get(user.UserId)">
@@ -166,46 +172,14 @@
                             <div class="form-group">
                                 <label for="" class="col-xs-4 control-label">Nhóm quyền chức năng <span class="req">*</span></label>
                                 <div class="col-xs-8">
-                                    <select class="form-control input-sm" ng-model="User.GroupId" required ng-init="User.GroupId='31'">
-                                        <option ng-repeat="u in lstUserGroup" value="{{u.GroupId}}">{{u.GroupName}}</option>
-                                    </select>
-                                    @*<div ng-dropdown-multiselect="" extra-settings="dropdownSetting"
-                                         options="Categories" selected-model="CategoriesSelected" checkboxes="true">
-                                    </div>*@
-                                    @*<ul class="tree-view-checkbox m-b-10">
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
-                                        <li><label><input type="checkbox">&nbsp;Publisher Admin</label></li>
+                                    <ul class="tree-view-checkbox m-b-10">
+                                        <li ng-repeat="u in lstUserGroup">
+                                            <label>
+                                                <input id="{{u.GroupId}}" value="{{u.GroupName}}" type="checkbox" ng-checked="selection.indexOf(u.GroupId) > -1" ng-click="toggleSelection(u.GroupId)">
+                                                {{u.GroupName}}
+                                            </label>
+                                        </li>
                                     </ul>
-                                    <div ng-dropdown-multiselect="" options="lstUserGroup" selected-model="example1model"></div>
-
-                                    <div class="text-center m-b-10"><i class="fa fa-caret-square-o-up fa-lg"></i>&nbsp;<i class="fa fa-caret-square-o-down fa-lg"></i></div>
-                                    <ul class="tree-view-checkbox">
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                        <li><label>Publisher Admin</label></li>
-                                    </ul>*@
-                                </div>
-                            </div>
-                            <div class="form-group none">
-                                <label for="" class="col-xs-4 control-label">Phòng ban</label>
-                                <div class="col-xs-6">
-                                    <select class="form-control input-sm" multiple>
-                                        <option selected>Phòng A</option>
-                                        <option>Phòng B</option>
-                                        <option>Phòng C</option>
-                                    </select>
-                                </div>
-                                <div class="col-xs-2">
-                                    <a href="#modal-select-pb" data-toggle="modal" class="btn btn-sm btn-default">Chọn</a>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -132,7 +132,7 @@ ngUsers.controller("ListUser", function ($scope, $http, dataService) {
         });
     }
     $scope.EditUser_Post = function (UserDetail) {
-        console.log(UserDetail);
+        UserDetail.GroupId = $scope.GroupIdSelected;
         $http({
             method: 'POST',
             url: '/User/UpdateUser',
@@ -198,6 +198,7 @@ ngUsers.controller("ListUser", function ($scope, $http, dataService) {
         else {
             selection.push(GroupId);
         }
+        console.log(selection);
         $scope.GroupIdSelected = selection.toString();
     };
     ////Create User
